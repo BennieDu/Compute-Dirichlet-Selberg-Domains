@@ -30,3 +30,18 @@ The Poincaré's Algorithm decides the discreteness and obtains the presentation 
 - If all conditions are satisfied, by Poincar\'e's Fundamental Polyhedron Theorem, $DS(X,\Gamma_l)$ is a fundamental domain for $\Gamma$, and $\Gamma$ is geometrically finite. Specifically, $\Gamma$ is discrete and has a finite presentation derived from the ridge cycles of $DS(X,\Gamma_l)$.
 
 We implement all steps of the algorithm in this program for the $SL(3,\mathbb{R})$ case. Specifically:
+
+- Given a center and generators in $SL(3,R)$ (both as numpy.array matrices) and maximum length of words, compute the polytope structure of the Dirichlet-Selberg domain.
+- Given polytope data for a Dirichlet-Selberg domain, check if it is exact.
+- Given polytope data for a Dirichlet-Selberg domain and knowing exactness, compute the ridge cycles and corresponding angle sums.
+- Given polytope data for a Dirichlet-Selberg domain, check if a given word (especially a generator) can be recovered by the Dirichlet-Selberg facet pairings.
+
+## Quick Start
+
+## Usage/API
+
+## Examples
+
+## License
+
+## Contact/Acknowledgments
