@@ -19,3 +19,14 @@ $$ DS(X,\Gamma) = \{Y\in \mathcal{X}_n\mid s(X,Y)\leq s(g.X,Y),\ \forall g\in\Ga
 has a projective polytope structure.
 
 The Poincaré's Algorithm decides the discreteness and obtains the presentation by contructing the Dirichlet-Selberg domain. More accurately, the algorithm tries to compute the polytope structure of the Dirichlet-Selberg domain $$DS(X,\Gamma_0)$$ for a finite subset $\Gamma_0\subset\Gamma$, then determine if it equals to the actual Dirichlet-Selberg domain by checking certain conditions and applying Poincaré's Fundamental Polyhedron Theorem:
+
+- Assume that a subgroup $\Gamma<SL(n,\mathbb{R})$ is given by generators $g_1,\dots,g_m$, with relators initially unknown. We begin by selecting a point $X\in\mathcal{X}_n$, setting $l = 1$, and computing the finite subset $\Gamma_l\subset \Gamma$, which consists of elements represented by words of length $\leq l$ in the letters $g_i$ and $g_i^{-1}$.
+- Compute the face poset of the Dirichlet-Selberg domain $DS(X,\Gamma_l)$, which forms a finitely-sided polytope in $\mathcal{X}_n$.
+- Utilizing this face poset data, check if $DS(X,\Gamma_l)$ satisfies the following conditions:
+  - Verify that $DS(X,\Gamma_l)$ is an exact convex polytope. For each $w\in \Gamma_l$, confirm that the isometry $w$ pairs the two facets contained in $\mathrm{Bis}(X,w.X)$ and $\mathrm{Bis}(X,w^{-1}.X)$, provided these facets exist.
+  - Verify that $D(X,\Gamma_l)$ satisfies the angle sum condition for each ridge cycle.
+  - Verify that each element $g_i$ can be expressed as a product of the facet pairings of $DS(X,\Gamma_l)$.
+- If any of these conditions are not met, increment $l$ by $1$ and repeat the initialization, computation, and verification processes.
+- If all conditions are satisfied, by Poincar\'e's Fundamental Polyhedron Theorem, $DS(X,\Gamma_l)$ is a fundamental domain for $\Gamma$, and $\Gamma$ is geometrically finite. Specifically, $\Gamma$ is discrete and has a finite presentation derived from the ridge cycles of $DS(X,\Gamma_l)$.
+
+We implement all steps of the algorithm in this program for the $SL(3,\mathbb{R})$ case. Specifically:
