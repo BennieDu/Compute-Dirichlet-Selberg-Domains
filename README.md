@@ -2,13 +2,20 @@
 
 ## Background
 
-This program is motivated by the Poincaré's Algorithm for the Lie group $SL(n,\mathbb{R})$ of non-compact type, aiming to determine if a given subgroup is discrete and obtain a group presentation.
+This program is motivated by the generalized Poincaré's Algorithm, aiming to determine if a given subgroup of the Lie group $SL(n,\mathbb{R})$ is discrete and obtain a group presentation[^Kap23][^Du24].
 
-Specifically, the corresponding symmetric space $\mathcal{X}_n = SL(n,\mathbb{R})/SO(n)$ is realized through a projective model:
+[^Kap23]: Michael Kapovich. Geometric algorithms for discreteness and faithfulness. In *Computational Aspects of Discrete Subgroups of Lie Groups*, Contemporary Mathematics, pages 87–112. AMS, 2023.
+[^Du24]: Yukun Du. Geometry of Selberg’s bisectors in the symmetric space $SL(n,R)/SO(n,R)$. *J. Lond. Math. Soc.*, 110(4), Oct 2024.
+
+Specifically, the corresponding symmetric space $\mathcal{X}_n = SL(n,\mathbb{R})/SO(n)$ is realized through a projective model[^Ebe96]:
+
+[^Ebe96]: Patrick Eberlein. *Geometry of nonpositively curved manifolds*. University of Chicago Press, 1996.
 
 $$\mathcal{X}_n = \{X\in \mathbf{P}(Sym_n(\mathbb{R}))\mid X>0\},$$
 
-and the entries of $X$ compose a projective coordinate of the point. Furthermore, the Selberg's two-point invariant,
+and the entries of $X$ compose a projective coordinate of the point. Furthermore, the Selberg's two-point invariant[^Sel62],
+
+[^Sel62]: Atle Selberg. On discontinuous groups in higher-dimensional symmetric spaces. *Matematika*, 6(3):3–16, 1962.
 
 $$ s(X,Y) = \mathrm{tr}(X^{-1}Y),$$
 
@@ -18,16 +25,20 @@ $$ DS(X,\Gamma) = \{Y\in \mathcal{X}_n\mid s(X,Y)\leq s(g.X,Y),\ \forall g\in\Ga
 
 has a projective polytope structure.
 
-The Poincaré's Algorithm decides the discreteness and obtains the presentation by contructing the Dirichlet-Selberg domain. More accurately, the algorithm tries to compute the polytope structure of the Dirichlet-Selberg domain $$DS(X,\Gamma_0)$$ for a finite subset $\Gamma_0\subset\Gamma$, then determine if it equals to the actual Dirichlet-Selberg domain by checking certain conditions and applying Poincaré's Fundamental Polyhedron Theorem:
+Our algorithm generalizes the original Poincaré's Algorithm[^Ril83][^EP94], deciding the discreteness and obtains the presentation of a $SL(n,\mathbb{R})$ subgroup by contructing a Dirichlet-Selberg domain. More accurately, the algorithm tries to compute the polytope structure of the Dirichlet-Selberg domain $$DS(X,\Gamma_0)$$ for a finite subset $\Gamma_0\subset\Gamma$, then determine if it equals to the actual Dirichlet-Selberg domain by checking certain conditions and applying Poincaré's Fundamental Polyhedron Theorem[^Du24]:
 
 - Assume that a subgroup $\Gamma<SL(n,\mathbb{R})$ is given by generators $g_1,\dots,g_m$, with relators initially unknown. We begin by selecting a point $X\in\mathcal{X}_n$, setting $l = 1$, and computing the finite subset $\Gamma_l\subset \Gamma$, which consists of elements represented by words of length $\leq l$ in the letters $g_i$ and $g_i^{-1}$.
 - Compute the face poset of the Dirichlet-Selberg domain $DS(X,\Gamma_l)$, which forms a finitely-sided polytope in $\mathcal{X}_n$.
 - Utilizing this face poset data, check if $DS(X,\Gamma_l)$ satisfies the following conditions:
   - Verify that $DS(X,\Gamma_l)$ is an exact convex polytope. For each $w\in \Gamma_l$, confirm that the isometry $w$ pairs the two facets contained in $\mathrm{Bis}(X,w.X)$ and $\mathrm{Bis}(X,w^{-1}.X)$, provided these facets exist.
-  - Verify that $D(X,\Gamma_l)$ satisfies the angle sum condition for each ridge cycle.
-  - Verify that each element $g_i$ can be expressed as a product of the facet pairings of $DS(X,\Gamma_l)$.
+  - Verify that $D(X,\Gamma_l)$ satisfies the angle sum condition for each ridge cycle[^Rat94].
+  - Verify that each element $g_i$ can be expressed as a product of the facet pairings of $DS(X,\Gamma_l)$[^Ril83] .
 - If any of these conditions are not met, increment $l$ by $1$ and repeat the initialization, computation, and verification processes.
 - If all conditions are satisfied, by Poincar\'e's Fundamental Polyhedron Theorem, $DS(X,\Gamma_l)$ is a fundamental domain for $\Gamma$, and $\Gamma$ is geometrically finite. Specifically, $\Gamma$ is discrete and has a finite presentation derived from the ridge cycles of $DS(X,\Gamma_l)$.
+
+[^Rat94]: John G. Ratcliffe. *Foundations of hyperbolic manifolds*, volume 149. Springer, 1994.
+[^Ril83]: Robert Riley. Applications of a computer implementation of Poincar´e’s theorem on fundamental polyhedra. *Math. Comput.*, 40(162):607–632, 1983.
+[^EP94]: David B. A. Epstein and Carlo Petronio. An exposition of Poincar´e’s polyhedron theorem. *Enseign. Math.*, 40(1-2):113–170, 1994.
 
 We implement all steps of the algorithm in this program for the $SL(3,\mathbb{R})$ case. Specifically:
 
@@ -69,4 +80,11 @@ This implies that the Dirichlet-Selberg domain for center $X = diag(1,1,1)$ and 
 
 ## License
 
+This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
+
 ## Contact/Acknowledgments
+
+- Yukun Du, Postdoc Researcher, University of Georgia
+  - Email: [yukun.du@uga.edu](mailto:yukun.du@uga.edu)
+  - Website (departmental): [Yukun Du](https://math.franklin.uga.edu/directory/people/yukun-du)
+- I would express my deepest gratitude to my Ph.D. advisor, Michael Kapovich, for introducing me to the area of Geometric Group Theory and for his invaluable mentoring throughout my graduate studies.
