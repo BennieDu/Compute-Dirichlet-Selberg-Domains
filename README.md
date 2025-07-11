@@ -8,7 +8,7 @@
 - [API Reference](#api-reference)
 - [Examples](#examples)
 - [License](#license)
-- [Contact/Acknowledgments](#contactacknowledgements)
+- [Contact/Acknowledgments](#contactacknowledgments)
 
 ## Background
 
