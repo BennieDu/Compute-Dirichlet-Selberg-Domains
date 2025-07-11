@@ -10,9 +10,9 @@
   - [Core Solver Functions](#core-solver-functions)
   - [Other Important Utility Functions](#other-important-utility-functions)
 - [Examples](#examples)
-  - [Elementary Subgroups](#)
-  - [Lattices](#)
-  - [Subgroups of $SL(2,\mathbb{R})$](#)
+  - [Elementary Subgroups](#elementary-subgroups)
+  - [Lattices](#lattices)
+  - [Subgroups of $SL(2,\mathbb{R})$](#subgroups-of-sl2mathbbr)
 - [License](#license)
 - [Contact/Acknowledgments](#contactacknowledgments)
 
