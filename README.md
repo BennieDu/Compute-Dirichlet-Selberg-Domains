@@ -10,6 +10,9 @@
   - [Core Solver Functions](#core-solver-functions)
   - [Other Important Utility Functions](#other-important-utility-functions)
 - [Examples](#examples)
+  - [Elementary Subgroups](#)
+  - [Lattices](#)
+  - [Subgroups of $SL(2,\mathbb{R})$](#)
 - [License](#license)
 - [Contact/Acknowledgments](#contactacknowledgments)
 
@@ -278,6 +281,12 @@ This implies that the Dirichlet-Selberg domain for center $X = diag(1,1,1)$ and 
   - `my_path`:
 
 ## Examples
+
+### Elementary Subgroups
+
+### Lattices
+
+### Subgroups of $SL(2,\mathbb{R})$
 
 ## License
 
