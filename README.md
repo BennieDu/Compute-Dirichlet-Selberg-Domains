@@ -1,5 +1,10 @@
 # Compute Dirichlet-Selberg domains in the symmetric space $SL(3,\mathbb{R})/SO(3)$
 
+## Table of contents
+
+- [Background](#background)
+- [Usage](#usage)
+
 ## Background
 
 This program is motivated by the generalized Poincaré's Algorithm, aiming to determine if a given subgroup of the Lie group $SL(n,\mathbb{R})$ is discrete and obtain a group presentation[^Kap23][^Du24].
