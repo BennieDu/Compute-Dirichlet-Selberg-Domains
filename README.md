@@ -1,9 +1,14 @@
 # Compute Dirichlet-Selberg domains in the symmetric space $SL(3,\mathbb{R})/SO(3)$
 
-## Table of contents
+## Table of Contents
 
 - [Background](#background)
 - [Usage](#usage)
+- [Quick Start](#quickstart)
+- [API Reference](#apireference)
+- [Examples](#examples)
+- [License](#license)
+- [Contact/Acknowledgments](#contact/acknowledgements)
 
 ## Background
 
