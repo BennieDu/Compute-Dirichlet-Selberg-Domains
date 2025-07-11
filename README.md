@@ -117,7 +117,9 @@ This implies that the Dirichlet-Selberg domain for center $X = diag(1,1,1)$ and 
 
 ## API Reference
 
-### `Word_Bis`
+### Important Data Classes
+
+#### `Word_Bis`
 
 <pre markdown>
   @dataclass
@@ -131,7 +133,7 @@ This implies that the Dirichlet-Selberg domain for center $X = diag(1,1,1)$ and 
   - `word`: The 3*3 numpy matrix of the isometry $g\in SL(3,\mathbb{R})$.
   - `bis`: The 3*3 numpy matrix of the normal matrix for the bisector: $Bis(X,g^{-1}.X) = A^\perp = \lbrace Y\mid \mathrm{tr}(AY) = 0\rbrace$.
 
-### `Poly_Face`
+#### `Poly_Face`
 
 <pre markdown>
   @dataclass
@@ -149,7 +151,7 @@ This implies that the Dirichlet-Selberg domain for center $X = diag(1,1,1)$ and 
   - `subfaces`: The indices of proper subfaces of the current face. Equivalently, the indices `i` such that `my_face_list[i]` represents a proper subface.
   - `sample_point`: A 3*3 numpy matrix representing a point lying in the face interior.
 
-### `Ridge_Cycle`
+#### `Ridge_Cycle`
 
 <pre markdown>
   @dataclass
@@ -163,7 +165,9 @@ This implies that the Dirichlet-Selberg domain for center $X = diag(1,1,1)$ and 
   - `ridge`: the indices of the ridges (as in `my_face_list`) in $[r]$, following the order. That is, the $i$-th index is for the ridge $r_i$.
   - `pairing`: the indices of the words taking a ridge to the next one. That is to say, `my_wbs[i].word` takes $r_i$ to $r_{i+1}$ (indices realized in modulo $m$).
 
-### `compute_selberg_domain`
+### Core Solver Functions
+
+#### `compute_selberg_domain`
 
 - Description:
 - Parameters:
@@ -176,7 +180,7 @@ This implies that the Dirichlet-Selberg domain for center $X = diag(1,1,1)$ and 
   - `my_wbs`:
   - `my_face_list`:
 
-### `polytope_is_exact`
+#### `polytope_is_exact`
 
 - Description:
 - Parameters:
@@ -187,7 +191,7 @@ This implies that the Dirichlet-Selberg domain for center $X = diag(1,1,1)$ and 
   - `facet_indices`:
   - `paired_indices`:
 
-### `compute_ridge_cycle`
+#### `compute_ridge_cycle`
 
 - Description:
 - Parameters:
@@ -196,7 +200,7 @@ This implies that the Dirichlet-Selberg domain for center $X = diag(1,1,1)$ and 
 - Returns:
   - `ridge_cycle_list`:
 
-### `angle_sum`
+#### `angle_sum`
 
 - Description:
 - Parameters:
@@ -206,7 +210,7 @@ This implies that the Dirichlet-Selberg domain for center $X = diag(1,1,1)$ and 
 - Returns:
   - `angle_sum_quotient`:
 
-### `word_is_recovered`
+#### `word_is_recovered`
 
 - Description:
 - Parameters:
@@ -216,7 +220,9 @@ This implies that the Dirichlet-Selberg domain for center $X = diag(1,1,1)$ and 
 - Returns:
   - `is_recovered`:
 
-### `word_bisectors`
+### Other Important Utility Functions
+
+#### `word_bisectors`
 
 - Description:
 - Parameters:
@@ -226,7 +232,7 @@ This implies that the Dirichlet-Selberg domain for center $X = diag(1,1,1)$ and 
 - Returns:
   - `my_wbs`:
 
-### `find_positive_definite_intersection`
+#### `find_positive_definite_intersection`
 
 - Description:
 - Parameters:
@@ -235,7 +241,7 @@ This implies that the Dirichlet-Selberg domain for center $X = diag(1,1,1)$ and 
   - `sample_point`:
   - `is_intersection`:
 
-### `selberg_domain_add_facet`
+#### `selberg_domain_add_facet`
 
 - Description:
 - Parameters:
@@ -246,7 +252,7 @@ This implies that the Dirichlet-Selberg domain for center $X = diag(1,1,1)$ and 
   - `my_wbs`:
   - `my_face_list`:
 
-### `face_is_paired`
+#### `face_is_paired`
 
 - Description:
 - Parameters:
@@ -258,7 +264,7 @@ This implies that the Dirichlet-Selberg domain for center $X = diag(1,1,1)$ and 
 - Returns:
   - `is_paired`:
 
-### `path_word`
+#### `path_word`
 
 - Description:
 - Parameters:
