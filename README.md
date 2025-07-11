@@ -116,10 +116,10 @@ This implies that the Dirichlet-Selberg domain for center $X = diag(1,1,1)$ and 
       bis: np.ndarray
 </pre>
 
-- Description: A bisector $Bis(X,g^{-1}.X)\subset \mathcal{X}_3$ along with the isometry $g\in SL(3,\mathbb{R})$.
+- Description: A bisector $Bis(X,g^{-1}.X)\subset \mathcal{X}_3$ along with the isometry $g\in SL(3,\mathbb{R})$. A list `my_wbs` of `Word_Bis` elements describes the hyperplanes defining a convex polytope in $\mathcal{X}_3$.
 - Attributes:
-  - `word`: the 3*3 numpy matrix of the isometry $g\in SL(3,\mathbb{R})$.
-  - `bis`: the 3*3 numpy matrix of the normal matrix for the bisector: $Bis(X,g^{-1}.X) = A^\perp = \lbrace Y\mid \mathrm{tr}(AY) = 0\rbrace$.
+  - `word`: The 3*3 numpy matrix of the isometry $g\in SL(3,\mathbb{R})$.
+  - `bis`: The 3*3 numpy matrix of the normal matrix for the bisector: $Bis(X,g^{-1}.X) = A^\perp = \lbrace Y\mid \mathrm{tr}(AY) = 0\rbrace$.
 
 ### `Poly_Face`
 
@@ -132,14 +132,14 @@ This implies that the Dirichlet-Selberg domain for center $X = diag(1,1,1)$ and 
       sample_point: np.ndarray
 </pre>
 
-- Description:
+- Description: A face of a convex polytope in $\mathcal{X}_3$. A list `my_face_list` along with the list `my_wbs` describes the polytope structure of a convex polytope in $\mathcal{X}_3$.
 - Attributes:
-  - `equs`:
-  - `codim`:
-  - `subfaces`:
-  - `sample_point`:
+  - `equs`: A list of indices of equations defining the minimal plane in $\mathcal{X}_3$ that contains the face. Equivalently, the indices `i` such that `my_wbs[i].bis` is normal to the face.
+  - `codim`: The codimension of the face.
+  - `subfaces`: The indices of proper subfaces of the current face. Equivalently, the indices `i` such that `my_face_list[i]` represents a proper subface.
+  - `sample_point`: A 3*3 numpy matrix representing a point lying in the face interior.
 
-### `Ridge_Cycles`
+### `Ridge_Cycle`
 
 <pre markdown>
   @dataclass
@@ -148,10 +148,115 @@ This implies that the Dirichlet-Selberg domain for center $X = diag(1,1,1)$ and 
       pairing: list[int]
 </pre>
 
-- Description:
+- Description: A ridge cycle $[r] = \lbrace r_0,r_1,\dots,r_{m-1}\rbrace$ of the convex polytope (described by lists such as `my_face_list` and `my_wbs`).
 - Attributes:
-  - `ridge`:
-  - `pairing`:
+  - `ridge`: the indices of the ridges (as in `my_face_list`) in $[r]$, following the order. That is, the $i$-th index is for the ridge $r_i$.
+  - `pairing`: the indices of the words taking a ridge to the next one. That is to say, `my_wbs[i].word` takes $r_i$ to $r_{i+1}$ (indices realized in modulo $m$).
+
+### `compute_selberg_domain`
+
+- Description:
+- Parameters:
+  - `generators`:
+  - `length_1`:
+  - `length_2`:
+  - `loop_times`:
+  - `center`:
+- Returns:
+  - `my_wbs`:
+  - `my_face_list`:
+
+### `polytope_is_exact`
+
+- Description:
+- Parameters:
+  - `my_wbs`:
+  - `my_face_list`:
+- Returns:
+  - `is_exact`:
+  - `facet_indices`:
+  - `paired_indices`:
+
+### `compute_ridge_cycle`
+
+- Description:
+- Parameters:
+  - `my_wbs`:
+  - `my_face_list`:
+- Returns:
+  - `ridge_cycle_list`:
+
+### `angle_sum`
+
+- Description:
+- Parameters:
+  - `my_wbs`:
+  - `my_face_list`:
+  - `ridge_cycle`:
+- Returns:
+  - `angle_sum_quotient`:
+
+### `word_is_recovered`
+
+- Description:
+- Parameters:
+  - `my_wbs`:
+  - `my_face_list`:
+  - `word`:
+- Returns:
+  - `is_recovered`:
+
+### `word_bisectors`
+
+- Description:
+- Parameters:
+  - `generators`:
+  - `length`:
+  - `center`:
+- Returns:
+  - `my_wbs`:
+
+### `find_positive_definite_intersection`
+
+- Description:
+- Parameters:
+  - `words`:
+- Returns:
+  - `sample_point`:
+  - `is_intersection`:
+
+### `selberg_domain_add_facet`
+
+- Description:
+- Parameters:
+  - `my_wbs`:
+  - `my_face_list`:
+  - `new_wb`:
+- Returns:
+  - `my_wbs`:
+  - `my_face_list`:
+
+### `face_is_paired`
+
+- Description:
+- Parameters:
+  - `my_wbs`:
+  - `my_face_list`:
+  - `old_face_ind`:
+  - `new_face_ind`:
+  - `word`:
+- Returns:
+  - `is_paired`:
+
+### `path_word`
+
+- Description:
+- Parameters:
+  - `my_wbs`:
+  - `my_face_list`:
+  - `dest_point`:
+- Returns:
+  - `my_path`:
 
 ## Examples
 
