@@ -175,16 +175,16 @@ This implies that the Dirichlet-Selberg domain for center $X = diag(1,1,1)$ and 
 
 #### `compute_selberg_domain`
 
-- Description:
+- Description: Compute the polytope structure of the pre-Dirichlet-Selberg domain $DS(X,\Gamma_0)$ from generators and center.
 - Parameters:
-  - `generators`:
-  - `length_1`:
-  - `length_2`:
-  - `loop_times`:
-  - `center`:
+  - `generators`: Isometries $g_1,\dots, g_k\in SL(3,\mathbb{R})$ (as numpy matrices) that generates the subgroup $\Gamma$.
+  - `length_1`: Maximal length of words in generators $g_1,\dots, g_k$ that will be added to the subset $\Gamma_0\subset \Gamma$.
+  - `length_2`: Maximal length of words, typically greater than `length_1` that may be added to $\Gamma_0$ to eliminate unpaired ridges.
+  - `loop_times`: Number of loops to pick a word up to length `length_2` and add it to $\Gamma_0$.
+  - `center`: The center $X\in\mathcal{X}_3$ (as a numpy matrix) of the Dirichlet-Selberg domain.
 - Returns:
-  - `my_wbs`:
-  - `my_face_list`:
+  - `my_wbs`: A list of data class `Word_Bis` elements, each describing a bisector that bounds the polytope $DS(X,\Gamma_0)$.
+  - `my_face_list`: A list of data class `Poly_Face` elements, each describing a face of the polytope $DS(X,\Gamma_0)$. The two lists together provide a thorough description of the polytope structure of the Dirichlet-Selberg domain.
 
 #### `polytope_is_exact`
 
