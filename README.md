@@ -4,11 +4,11 @@
 
 - [Background](#background)
 - [Usage](#usage)
-- [Quick Start](#quickstart)
-- [API Reference](#apireference)
+- [Quick Start](#quick-start)
+- [API Reference](#api-reference)
 - [Examples](#examples)
 - [License](#license)
-- [Contact/Acknowledgments](#contact/acknowledgements)
+- [Contact/Acknowledgments](#contactacknowledgements)
 
 ## Background
 
