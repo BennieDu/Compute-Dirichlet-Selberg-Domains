@@ -286,6 +286,148 @@ This implies that the Dirichlet-Selberg domain for center $X = diag(1,1,1)$ and 
 
 ### Lattices
 
+Consider the congruence subgroup of level $2$,
+
+$$ \Gamma = \langle I + 2\mathbf{e}_i\otimes 2\mathbf{e}_j,\ i\neq j\rangle. $$
+
+To compute its Dirichlet-Selberg domain, run the following script in a new cell:
+
+<pre markdown>
+  generators = []
+  for i, j in itertools.permutations(range(3), 2):
+      generator = np.eye(3)
+      generator[i, j] = 2
+      generators.append(generator)
+  center = np.eye(3)
+  my_wbs, my_face_list = compute_selberg_domain(generators, 1, 2, 20, center)
+</pre>
+
+Counting the number of faces:
+
+<pre markdown>
+  print("Number of facets:", sum(1 for face in my_face_list if face.codim == 1))
+  print("Number of ridges:", sum(1 for face in my_face_list if face.codim == 2))
+  print("Number of peaks:", sum(1 for face in my_face_list if face.codim == 3))
+  print("Number of edges:", sum(1 for face in my_face_list if face.codim == 4))
+  print("Number of vertices:", sum(1 for face in my_face_list if face.codim == 5))
+</pre>
+
+
+<details>
+  <summary><strong>Expected Output (click to expand)</strong></summary>
+
+  ```text
+  Number of facets: 24
+  Number of ridges: 84
+  Number of peaks: 96
+  Number of edges: 0
+  Number of vertices: 0
+  ```
+</details>
+
+Indeed, all the thirteen vertices of the domain are Satake point of rank $1$, hence no vertices or edges exist in the interior of $\mathcal{X}_3$.
+
+Verify the exactness and angle-sum condition:
+
+<pre markdown>
+  is_exact, original_facets, paired_facets = polytope_is_exact(my_wbs, my_face_list)
+  if not is_exact:
+      print("The Dirichlet-Selberg domain is not exact.")
+  else:
+      ridge_cycles = compute_ridge_cycle(my_wbs, my_face_list)
+      for i in range(len(ridge_cycles)):
+          ridge_cycle = ridge_cycles[i]
+          print("The indices of ridges in the", i, "th cycle:", ridge_cycle.ridge)
+          pairings = [my_wbs[wb].word for wb in ridge_cycle.pairing]
+          my_angle_sum = angle_sum(my_wbs, my_face_list, ridge_cycle)
+          if my_angle_sum == None:
+              print("The", i, "th ridge cycle does not satisfy the angle sum condition.")
+          else:
+              print("The angle sum divisor for the", i, "th ridge cycle equals", my_angle_sum)
+</pre>
+
+<details>
+  <summary><strong>Expected Output (click to expand)</strong></summary>
+
+  ```text
+  The indices of ridges in the 0 th cycle: [96, 102, 106, 104]
+  The angle sum divisor for the 0 th ridge cycle equals 1
+  The indices of ridges in the 1 th cycle: [100, 154, 136]
+  The angle sum divisor for the 1 th ridge cycle equals 1
+  The indices of ridges in the 2 th cycle: [116, 122, 168]
+  The angle sum divisor for the 2 th ridge cycle equals 1
+  The indices of ridges in the 3 th cycle: [124, 129, 143, 169]
+  The angle sum divisor for the 3 th ridge cycle equals 1
+  The indices of ridges in the 4 th cycle: [133, 118, 153]
+  The angle sum divisor for the 4 th ridge cycle equals 1
+  The indices of ridges in the 5 th cycle: [165, 103, 123]
+  The angle sum divisor for the 5 th ridge cycle equals 1
+  The indices of ridges in the 6 th cycle: [97, 144, 131]
+  The angle sum divisor for the 6 th ridge cycle equals 1
+  The indices of ridges in the 7 th cycle: [109, 126, 172]
+  The angle sum divisor for the 7 th ridge cycle equals 1
+  The indices of ridges in the 8 th cycle: [120, 134, 155, 166]
+  The angle sum divisor for the 8 th ridge cycle equals 1
+  The indices of ridges in the 9 th cycle: [128, 111, 142]
+  The angle sum divisor for the 9 th ridge cycle equals 1
+  The indices of ridges in the 10 th cycle: [170, 105, 127]
+  The angle sum divisor for the 10 th ridge cycle equals 1
+  The indices of ridges in the 11 th cycle: [98, 107, 112, 110]
+  The angle sum divisor for the 11 th ridge cycle equals 1
+  The indices of ridges in the 12 th cycle: [99, 160, 149]
+  The angle sum divisor for the 12 th ridge cycle equals 1
+  The indices of ridges in the 13 th cycle: [113, 140, 176]
+  The angle sum divisor for the 13 th ridge cycle equals 1
+  The indices of ridges in the 14 th cycle: [125, 145, 130, 171]
+  The angle sum divisor for the 14 th ridge cycle equals 1
+  The indices of ridges in the 15 th cycle: [147, 115, 159]
+  The angle sum divisor for the 15 th ridge cycle equals 1
+  The indices of ridges in the 16 th cycle: [174, 108, 141]
+  The angle sum divisor for the 16 th ridge cycle equals 1
+  The indices of ridges in the 17 th cycle: [138, 148, 161, 175]
+  The angle sum divisor for the 17 th ridge cycle equals 1
+  The indices of ridges in the 18 th cycle: [101, 114, 119, 117]
+  The angle sum divisor for the 18 th ridge cycle equals 1
+  The indices of ridges in the 19 th cycle: [121, 156, 135, 167]
+  The angle sum divisor for the 19 th ridge cycle equals 1
+  The indices of ridges in the 20 th cycle: [139, 162, 150, 177]
+  The angle sum divisor for the 20 th ridge cycle equals 1
+  The indices of ridges in the 21 th cycle: [132, 178, 146]
+  The angle sum divisor for the 21 th ridge cycle equals 2
+  The indices of ridges in the 22 th cycle: [163, 173, 151]
+  The angle sum divisor for the 22 th ridge cycle equals 2
+  The indices of ridges in the 23 th cycle: [137, 179, 157]
+  The angle sum divisor for the 23 th ridge cycle equals 2
+  The indices of ridges in the 24 th cycle: [164, 158, 152]
+  The angle sum divisor for the 24 th ridge cycle equals 2
+  ```
+</details>
+
+The output implying that $21$ of the ridge cycles satisfy the angle sum condition with angle sum $2\pi$, and $4$ of them satisfy the condition with angle sum $\pi$.
+
+Verifying that all generators are recovered by the facet pairings:
+
+<pre markdown>
+  for ind, matrix in enumerate(generators):
+      if word_is_recovered(my_wbs, my_face_list, matrix):
+          print("the", ind, "th generator is recovered by the product of facet pairings with indices:", path_word(my_wbs, my_face_list, matrix.T @ center @ matrix))
+      else:
+          print("the", ind, "th generator is not recovered by the facet pairings." )
+</pre>
+
+<details>
+  <summary><strong>Expected Output (click to expand)</strong></summary>
+
+  ```text
+  the 0 th generator is recovered by the product of facet pairings with indices: [6]
+  the 1 th generator is recovered by the product of facet pairings with indices: [7]
+  the 2 th generator is recovered by the product of facet pairings with indices: [8]
+  the 3 th generator is recovered by the product of facet pairings with indices: [9]
+  the 4 th generator is recovered by the product of facet pairings with indices: [10]
+  the 5 th generator is recovered by the product of facet pairings with indices: [11]
+  ```
+</details>
+
 ### Subgroups of $SL(2,\mathbb{R})$
 
 ## License
