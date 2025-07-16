@@ -546,18 +546,12 @@ $$ SL(2,\mathbb{R})\hookrightarrow SL(3,\mathbb{R}),\ g\mapsto \mathrm{diag}(g,1
 The Dirichlet-Selberg domains (with block-diagonal centers) of the images of such embeddings are equivalent to the product of $\mathbb{R}^3$ with the Dirichlet domain of the corresponding $SL(2,\mathbb{R})$-subgroups. Their polyhedral structures are also computable using our program. For example the fundamental group of the double-torus:
 
 <pre markdown>
-  generators = [np.array([[(np.sqrt(2) + 2 ** (3/4) + 2)/2, (-np.sqrt(2) + 2 ** (3/4) - 2 + 2 ** (5/4))/2, 0],
-                    [(np.sqrt(2) + 2 ** (3/4) + 2 + 2 ** (5/4))/2, (np.sqrt(2) - 2 ** (3/4) + 2)/2, 0],
-                    [0, 0, 1]]),
-                    np.array([[(np.sqrt(2) + 2 ** (3/4) + 2)/2, (np.sqrt(2) - 2 ** (3/4) + 2 - 2 ** (5/4))/2, 0],
-                    [(-np.sqrt(2) - 2 ** (3/4) - 2 - 2 ** (5/4))/2, (np.sqrt(2) - 2 ** (3/4) + 2)/2, 0],
-                    [0, 0, 1]]),
-                    np.array([[(np.sqrt(2) - 2 ** (3/4) + 2)/2, (-np.sqrt(2) - 2 ** (3/4) - 2 - 2 ** (5/4))/2, 0],
-                    [(np.sqrt(2) - 2 ** (3/4) + 2 - 2 ** (5/4))/2, (np.sqrt(2) + 2 ** (3/4) + 2)/2, 0],
-                    [0, 0, 1]]),
-                    np.array([[(np.sqrt(2) - 2 ** (3/4) + 2)/2, (np.sqrt(2) + 2 ** (3/4) + 2 + 2 ** (5/4))/2, 0],
-                    [(-np.sqrt(2) + 2 ** (3/4) - 2 + 2 ** (5/4))/2, (np.sqrt(2) + 2 ** (3/4) + 2)/2, 0],
-                    [0, 0, 1]])]
+  generators = []
+  for i, j in itertools.product([-1,1], repeat=2):
+      generator = np.array([[(np.sqrt(2) + 2 + i*(2 ** (3/4)))/2, (j*(np.sqrt(2) + 2) - i*j*(2 ** (3/4)  + 2 ** (5/4)))/2, 0],
+                      [(-j*(np.sqrt(2) + 2) - i*j*(2 ** (3/4)  + 2 ** (5/4)))/2, (np.sqrt(2) + 2 - i*(2 ** (3/4)))/2, 0],
+                      [0, 0, 1]])
+      generators.append(generator)
   center = np.eye(3)
   my_wbs, my_face_list = compute_selberg_domain(generators, 1, 1, 20, center)
 </pre>
@@ -609,7 +603,7 @@ Verify the exactness and angle-sum condition:
   <summary><strong>Expected Output (click to expand)</strong></summary>
 
   ```text
-  The indices of ridges in the 0 th cycle: [0, 2, 5, 6, 1, 4, 7, 3]
+  The indices of ridges in the 0 th cycle: [1, 2, 4, 3, 0, 5, 7, 6]
   The angle sum divisor for the 0 th ridge cycle equals 1
   ```
 </details>
@@ -630,10 +624,10 @@ Verifying that all generators are recovered by the facet pairings:
   <summary><strong>Expected Output (click to expand)</strong></summary>
 
   ```text
-  the 0 th generator is recovered by the product of facet pairings with indices: [0]
-  the 1 th generator is recovered by the product of facet pairings with indices: [1]
-  the 2 th generator is recovered by the product of facet pairings with indices: [2]
-  the 3 th generator is recovered by the product of facet pairings with indices: [3]
+  the 0 th generator is recovered by the product of facet pairings with indices: [4]
+  the 1 th generator is recovered by the product of facet pairings with indices: [5]
+  the 2 th generator is recovered by the product of facet pairings with indices: [6]
+  the 3 th generator is recovered by the product of facet pairings with indices: [7]
   ```
 </details>
 
