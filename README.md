@@ -539,6 +539,104 @@ Verifying that all generators are recovered by the facet pairings:
 
 ### Subgroups of $SL(2,\mathbb{R})$
 
+We can recognize discrete subgroups of $SL(2,\mathbb{R})$ as $SL(3,\mathbb{R})$-subgroups following the block‐diagonal embedding,
+
+$$ SL(2,\mathbb{R})\hookrightarrow SL(3,\mathbb{R}),\ g\mapsto \mathrm{diag}(g,1). $$
+
+The Dirichlet-Selberg domains (with block-diagonal centers) of the images of such embeddings are equivalent to the product of $\mathbb{R}^3$ with the Dirichlet domain of the corresponding $SL(2,\mathbb{R})$-subgroups. Their polyhedral structures are also computable using our program. For example the fundamental group of the double-torus:
+
+<pre markdown>
+  generators = [np.array([[(np.sqrt(2) + 2 ** (3/4) + 2)/2, (-np.sqrt(2) + 2 ** (3/4) - 2 + 2 ** (5/4))/2, 0],
+                    [(np.sqrt(2) + 2 ** (3/4) + 2 + 2 ** (5/4))/2, (np.sqrt(2) - 2 ** (3/4) + 2)/2, 0],
+                    [0, 0, 1]]),
+                    np.array([[(np.sqrt(2) + 2 ** (3/4) + 2)/2, (np.sqrt(2) - 2 ** (3/4) + 2 - 2 ** (5/4))/2, 0],
+                    [(-np.sqrt(2) - 2 ** (3/4) - 2 - 2 ** (5/4))/2, (np.sqrt(2) - 2 ** (3/4) + 2)/2, 0],
+                    [0, 0, 1]]),
+                    np.array([[(np.sqrt(2) - 2 ** (3/4) + 2)/2, (-np.sqrt(2) - 2 ** (3/4) - 2 - 2 ** (5/4))/2, 0],
+                    [(np.sqrt(2) - 2 ** (3/4) + 2 - 2 ** (5/4))/2, (np.sqrt(2) + 2 ** (3/4) + 2)/2, 0],
+                    [0, 0, 1]]),
+                    np.array([[(np.sqrt(2) - 2 ** (3/4) + 2)/2, (np.sqrt(2) + 2 ** (3/4) + 2 + 2 ** (5/4))/2, 0],
+                    [(-np.sqrt(2) + 2 ** (3/4) - 2 + 2 ** (5/4))/2, (np.sqrt(2) + 2 ** (3/4) + 2)/2, 0],
+                    [0, 0, 1]])]
+  center = np.eye(3)
+  my_wbs, my_face_list = compute_selberg_domain(generators, 1, 1, 20, center)
+</pre>
+
+Counting the number of faces:
+
+<pre markdown>
+  print("Number of facets:", sum(1 for face in my_face_list if face.codim == 1))
+  print("Number of ridges:", sum(1 for face in my_face_list if face.codim == 2))
+  print("Number of peaks:", sum(1 for face in my_face_list if face.codim == 3))
+  print("Number of edges:", sum(1 for face in my_face_list if face.codim == 4))
+  print("Number of vertices:", sum(1 for face in my_face_list if face.codim == 5))
+</pre>
+
+<details>
+  <summary><strong>Expected Output (click to expand)</strong></summary>
+
+  ```text
+  Number of facets: 8
+  Number of ridges: 8
+  Number of peaks: 0
+  Number of edges: 0
+  Number of vertices: 0
+  ```
+</details>
+
+This corresponds to an octagon, the standard fundamental domain of the double-torus group.
+
+Verify the exactness and angle-sum condition:
+
+<pre markdown>
+  is_exact, original_facets, paired_facets = polytope_is_exact(my_wbs, my_face_list)
+  if not is_exact:
+      print("The Dirichlet-Selberg domain is not exact.")
+  else:
+      ridge_cycles = compute_ridge_cycle(my_wbs, my_face_list)
+      for i in range(len(ridge_cycles)):
+          ridge_cycle = ridge_cycles[i]
+          print("The indices of ridges in the", i, "th cycle:", ridge_cycle.ridge)
+          pairings = [my_wbs[wb].word for wb in ridge_cycle.pairing]
+          my_angle_sum = angle_sum(my_wbs, my_face_list, ridge_cycle)
+          if my_angle_sum == None:
+              print("The", i, "th ridge cycle does not satisfy the angle sum condition.")
+          else:
+              print("The angle sum divisor for the", i, "th ridge cycle equals", my_angle_sum)
+</pre>
+
+<details>
+  <summary><strong>Expected Output (click to expand)</strong></summary>
+
+  ```text
+  The indices of ridges in the 0 th cycle: [0, 2, 5, 6, 1, 4, 7, 3]
+  The angle sum divisor for the 0 th ridge cycle equals 1
+  ```
+</details>
+
+This implies that the angle sum of the unique ridge-cycle is $2\pi$, also agrees with the well-known fact for the hyperbolic double-torus.
+
+Verifying that all generators are recovered by the facet pairings:
+
+<pre markdown>
+  for ind, matrix in enumerate(generators):
+      if word_is_recovered(my_wbs, my_face_list, matrix):
+          print("the", ind, "th generator is recovered by the product of facet pairings with indices:", path_word(my_wbs, my_face_list, matrix.T @ center @ matrix))
+      else:
+          print("the", ind, "th generator is not recovered by the facet pairings." )
+</pre>
+
+<details>
+  <summary><strong>Expected Output (click to expand)</strong></summary>
+
+  ```text
+  the 0 th generator is recovered by the product of facet pairings with indices: [0]
+  the 1 th generator is recovered by the product of facet pairings with indices: [1]
+  the 2 th generator is recovered by the product of facet pairings with indices: [2]
+  the 3 th generator is recovered by the product of facet pairings with indices: [3]
+  ```
+</details>
+
 ## License
 
 This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
