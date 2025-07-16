@@ -67,10 +67,10 @@ We implement all steps of the algorithm in this program for the $SL(3,\mathbb{R}
 
 ### Install dependencies
 
-Make sure you have a Python 3 environment, then:
+Make sure you have a Jupyter Notebook with Python 3 environment, then:
 
 <pre markdown>
-  pip install -r requirements.txt
+  pip install numpy sympy scipy cvxpy tqdm ipywidgets widgetsnbextension
 </pre>
 
 ### Launch the notebook
