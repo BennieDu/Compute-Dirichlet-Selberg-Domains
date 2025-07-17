@@ -253,7 +253,7 @@ This implies that the Dirichlet-Selberg domain for center $X = diag(1,1,1)$ and 
 - Parameters:
   - `my_wbs`: A list of bisectors with facet pairings bounding the Dirichlet-Selberg domain.
   - `my_face_list`: A list of faces describing the polyhedral structure of the Dirichlet-Selberg domain.
-  - `new_wb`: A `numpy.array` matrix $A$ representing the normal matrix of the new half space $\lbraceX\mid \mathrm{tr}(AX)\geq 0\rbrace$.
+  - `new_wb`: A `numpy.array` matrix $A$ representing the normal matrix of the new half space $\lbrace X\mid \mathrm{tr}(AX)\geq 0\rbrace$.
 - Returns:
   - `my_wbs`: A list of bisectors with facet pairings bounding the new domain.
   - `my_face_list`: A list of faces describing the polyhedral structure of the new domain.
