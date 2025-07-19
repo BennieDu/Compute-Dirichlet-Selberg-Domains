@@ -193,9 +193,7 @@ This implies that the Dirichlet-Selberg domain for center $X = diag(1,1,1)$ and 
   - `my_wbs`: A list of bisectors with facet pairings bounding the Dirichlet-Selberg domain.
   - `my_face_list`: A list of faces describing the polyhedral structure of the Dirichlet-Selberg domain.
 - Returns:
-  - `is_exact`: A boolean variable deciding if the given domain is exact.
-  - `facet_indices`: A list of indices (in `my_face_list`, in order) of the facets of the domain.
-  - `paired_indices`: A list of indices of the facets so the corresponding indices in `facet_indices` and `paired_indices` correspond to paired facets.
+  - `pairing_dict`: A dictionary whose keys are indices (in `my_face_list`) of the facets, and the values are the incides of the corresponding paired facets. It is `None` if the given domain is not exact.
 
 #### `compute_ridge_cycle`
 
@@ -243,9 +241,8 @@ This implies that the Dirichlet-Selberg domain for center $X = diag(1,1,1)$ and 
 - Description: Decide if the intersection $\cap A_i^\perp$ of given hyperplanes is non-empty; if so, obtain a sample point in this intersection plane.
 - Parameters:
   - `words`: A list of indefinite `numpy.array` matrices $A_i$, each represents a hyperplane $A_i^\perp\subset \mathcal{X}_3$.
-- Returns: a data class `Find_Intersection` consisting of the following attributes:
-  - `sample_point`: A `numpy.array` matrix representing a sample point in the intersection $\cap A_i^\perp$.
-  - `is_intersection`: A boolean deciding if the intersection is non-empty.
+- Returns:
+  - `sample_point`: A `numpy.array` matrix representing a sample point in the intersection $\cap A_i^\perp$, or `None` if the intersection is empty.
 
 #### `selberg_domain_add_facet`
 
