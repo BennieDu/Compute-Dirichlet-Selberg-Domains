@@ -313,17 +313,17 @@ This is a two-generated Abelian subgroup of $SL(3,\mathbb{Z})$. To compute its D
   center = np.array([[2, 3, -2],
               [3, 5, -3],
               [-2, -3, 3]])
-  my_wbs, my_face_list = compute_selberg_domain(generators, 1, 3, 20, center)
+  wbs, faces = compute_selberg_domain(generators, center, 1, 3, 20)
 </pre>
 
 Counting the number of faces:
 
 <pre markdown>
-  print("Number of facets:", sum(1 for face in my_face_list if face.codim == 1))
-  print("Number of ridges:", sum(1 for face in my_face_list if face.codim == 2))
-  print("Number of peaks:", sum(1 for face in my_face_list if face.codim == 3))
-  print("Number of edges:", sum(1 for face in my_face_list if face.codim == 4))
-  print("Number of vertices:", sum(1 for face in my_face_list if face.codim == 5))
+  print("Number of facets:", sum(1 for face in faces if face.codim == 1))
+  print("Number of ridges:", sum(1 for face in faces if face.codim == 2))
+  print("Number of peaks:", sum(1 for face in faces if face.codim == 3))
+  print("Number of edges:", sum(1 for face in faces if face.codim == 4))
+  print("Number of vertices:", sum(1 for face in faces if face.codim == 5))
 </pre>
 
 <details>
@@ -341,20 +341,19 @@ Counting the number of faces:
 Verify the exactness and angle-sum condition:
 
 <pre markdown>
-  is_exact, original_facets, paired_facets = polytope_is_exact(my_wbs, my_face_list)
-  if not is_exact:
+  pairing_dict = polytope_exactness(wbs, faces)
+  if pairing_dict is None:
       print("The Dirichlet-Selberg domain is not exact.")
   else:
-      ridge_cycles = compute_ridge_cycle(my_wbs, my_face_list)
+      ridge_cycles = compute_ridge_cycles(wbs, faces)
       for i in range(len(ridge_cycles)):
           ridge_cycle = ridge_cycles[i]
           print("The indices of ridges in the", i, "th cycle:", ridge_cycle.ridge)
-          pairings = [my_wbs[wb].word for wb in ridge_cycle.pairing]
-          my_angle_sum = angle_sum(my_wbs, my_face_list, ridge_cycle)
-          if my_angle_sum == None:
+          angle_sum_quotient = angle_sum(wbs, faces, ridge_cycle)
+          if angle_sum_quotient is None:
               print("The", i, "th ridge cycle does not satisfy the angle sum condition.")
           else:
-              print("The angle sum divisor for the", i, "th ridge cycle equals", my_angle_sum)
+              print("The angle sum divisor for the", i, "th ridge cycle equals", angle_sum_quotient)
 </pre>
 
 <details>
@@ -380,8 +379,8 @@ Verifying that all generators are recovered by the facet pairings:
 
 <pre markdown>
   for ind, matrix in enumerate(generators):
-      if word_is_recovered(my_wbs, my_face_list, matrix):
-          print("the", ind, "th generator is recovered by the product of facet pairings with indices:", path_word(my_wbs, my_face_list, matrix.T @ center @ matrix))
+      if is_word_recovered(wbs, faces, matrix):
+          print("the", ind, "th generator is recovered by the product of facet pairings with indices:", find_path_word(wbs, faces, matrix.T @ center @ matrix))
       else:
           print("the", ind, "th generator is not recovered by the facet pairings." )
 </pre>
@@ -410,17 +409,17 @@ To compute its Dirichlet-Selberg domain, run the following script in a new cell:
       generator[i, j] = 2
       generators.append(generator)
   center = np.eye(3)
-  my_wbs, my_face_list = compute_selberg_domain(generators, 1, 2, 20, center)
+  wbs, faces = compute_selberg_domain(generators, center, 1, 2, 20)
 </pre>
 
 Counting the number of faces:
 
 <pre markdown>
-  print("Number of facets:", sum(1 for face in my_face_list if face.codim == 1))
-  print("Number of ridges:", sum(1 for face in my_face_list if face.codim == 2))
-  print("Number of peaks:", sum(1 for face in my_face_list if face.codim == 3))
-  print("Number of edges:", sum(1 for face in my_face_list if face.codim == 4))
-  print("Number of vertices:", sum(1 for face in my_face_list if face.codim == 5))
+  print("Number of facets:", sum(1 for face in faces if face.codim == 1))
+  print("Number of ridges:", sum(1 for face in faces if face.codim == 2))
+  print("Number of peaks:", sum(1 for face in faces if face.codim == 3))
+  print("Number of edges:", sum(1 for face in faces if face.codim == 4))
+  print("Number of vertices:", sum(1 for face in faces if face.codim == 5))
 </pre>
 
 <details>
@@ -440,20 +439,19 @@ Indeed, all the thirteen vertices of the domain are Satake point of rank $1$, he
 Verify the exactness and angle-sum condition:
 
 <pre markdown>
-  is_exact, original_facets, paired_facets = polytope_is_exact(my_wbs, my_face_list)
-  if not is_exact:
+  pairing_dict = polytope_exactness(wbs, faces)
+  if pairing_dict is None:
       print("The Dirichlet-Selberg domain is not exact.")
   else:
-      ridge_cycles = compute_ridge_cycle(my_wbs, my_face_list)
+      ridge_cycles = compute_ridge_cycles(wbs, faces)
       for i in range(len(ridge_cycles)):
           ridge_cycle = ridge_cycles[i]
           print("The indices of ridges in the", i, "th cycle:", ridge_cycle.ridge)
-          pairings = [my_wbs[wb].word for wb in ridge_cycle.pairing]
-          my_angle_sum = angle_sum(my_wbs, my_face_list, ridge_cycle)
-          if my_angle_sum == None:
+          angle_sum_quotient = angle_sum(wbs, faces, ridge_cycle)
+          if angle_sum_quotient is None:
               print("The", i, "th ridge cycle does not satisfy the angle sum condition.")
           else:
-              print("The angle sum divisor for the", i, "th ridge cycle equals", my_angle_sum)
+              print("The angle sum divisor for the", i, "th ridge cycle equals", angle_sum_quotient)
 </pre>
 
 <details>
@@ -519,8 +517,8 @@ Verifying that all generators are recovered by the facet pairings:
 
 <pre markdown>
   for ind, matrix in enumerate(generators):
-      if word_is_recovered(my_wbs, my_face_list, matrix):
-          print("the", ind, "th generator is recovered by the product of facet pairings with indices:", path_word(my_wbs, my_face_list, matrix.T @ center @ matrix))
+      if is_word_recovered(wbs, faces, matrix):
+          print("the", ind, "th generator is recovered by the product of facet pairings with indices:", find_path_word(wbs, faces, matrix.T @ center @ matrix))
       else:
           print("the", ind, "th generator is not recovered by the facet pairings." )
 </pre>
@@ -554,17 +552,17 @@ The Dirichlet-Selberg domains (with block-diagonal centers) of the images of suc
                       [0, 0, 1]])
       generators.append(generator)
   center = np.eye(3)
-  my_wbs, my_face_list = compute_selberg_domain(generators, 1, 1, 20, center)
+  wbs, faces = compute_selberg_domain(generators, center, 1, 1, 20)
 </pre>
 
 Counting the number of faces:
 
 <pre markdown>
-  print("Number of facets:", sum(1 for face in my_face_list if face.codim == 1))
-  print("Number of ridges:", sum(1 for face in my_face_list if face.codim == 2))
-  print("Number of peaks:", sum(1 for face in my_face_list if face.codim == 3))
-  print("Number of edges:", sum(1 for face in my_face_list if face.codim == 4))
-  print("Number of vertices:", sum(1 for face in my_face_list if face.codim == 5))
+  print("Number of facets:", sum(1 for face in faces if face.codim == 1))
+  print("Number of ridges:", sum(1 for face in faces if face.codim == 2))
+  print("Number of peaks:", sum(1 for face in faces if face.codim == 3))
+  print("Number of edges:", sum(1 for face in faces if face.codim == 4))
+  print("Number of vertices:", sum(1 for face in faces if face.codim == 5))
 </pre>
 
 <details>
@@ -584,20 +582,19 @@ This corresponds to an octagon, the standard fundamental domain of the double-to
 Verify the exactness and angle-sum condition:
 
 <pre markdown>
-  is_exact, original_facets, paired_facets = polytope_is_exact(my_wbs, my_face_list)
-  if not is_exact:
+  pairing_dict = polytope_exactness(wbs, faces)
+  if pairing_dict is None:
       print("The Dirichlet-Selberg domain is not exact.")
   else:
-      ridge_cycles = compute_ridge_cycle(my_wbs, my_face_list)
+      ridge_cycles = compute_ridge_cycles(wbs, faces)
       for i in range(len(ridge_cycles)):
           ridge_cycle = ridge_cycles[i]
           print("The indices of ridges in the", i, "th cycle:", ridge_cycle.ridge)
-          pairings = [my_wbs[wb].word for wb in ridge_cycle.pairing]
-          my_angle_sum = angle_sum(my_wbs, my_face_list, ridge_cycle)
-          if my_angle_sum == None:
+          angle_sum_quotient = angle_sum(wbs, faces, ridge_cycle)
+          if angle_sum_quotient is None:
               print("The", i, "th ridge cycle does not satisfy the angle sum condition.")
           else:
-              print("The angle sum divisor for the", i, "th ridge cycle equals", my_angle_sum)
+              print("The angle sum divisor for the", i, "th ridge cycle equals", angle_sum_quotient)
 </pre>
 
 <details>
@@ -615,8 +612,8 @@ Verifying that all generators are recovered by the facet pairings:
 
 <pre markdown>
   for ind, matrix in enumerate(generators):
-      if word_is_recovered(my_wbs, my_face_list, matrix):
-          print("the", ind, "th generator is recovered by the product of facet pairings with indices:", path_word(my_wbs, my_face_list, matrix.T @ center @ matrix))
+      if is_word_recovered(wbs, faces, matrix):
+          print("the", ind, "th generator is recovered by the product of facet pairings with indices:", find_path_word(wbs, faces, matrix.T @ center @ matrix))
       else:
           print("the", ind, "th generator is not recovered by the facet pairings." )
 </pre>
