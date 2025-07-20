@@ -14,7 +14,7 @@
   - [Lattices](#lattices)
   - [$SL(2,\mathbb{R})$ Subgroups](#sl2mathbbr-subgroups)
 - [License](#license)
-- [Contact & Acknowledgments](#contactacknowledgments)
+- [Contact & Acknowledgments](#contact--acknowledgments)
 
 ## Background
 
