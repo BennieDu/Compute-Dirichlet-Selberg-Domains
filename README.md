@@ -636,7 +636,7 @@ Verifying that all generators are recovered by the facet pairings:
 
 This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
 
-## Contact/Acknowledgments
+## Contact & Acknowledgments
 
 - Yukun Du, Postdoc Researcher, University of Georgia
   - Email: [yukun.du@uga.edu](mailto:yukun.du@uga.edu)
