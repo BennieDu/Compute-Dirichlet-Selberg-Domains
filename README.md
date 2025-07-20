@@ -121,7 +121,7 @@ Expected output (for this cyclic example):
 
 This confirms that, for
 
-$$ X = \mathrnm{diag}(1,1,1),\ g = \mathrm{diag}(3,2,\frac{1}{6}), $$
+$$ X = \mathrm{diag}(1,1,1),\ g = \mathrm{diag}(3,2,\frac{1}{6}), $$
 
 the Dirichlet-Selberg domain is the **dihedron** bounded by the two bisectors $Bis(X,g.X)$ and $Bis(X,g^{-1}.X)$.
 
