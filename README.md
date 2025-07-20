@@ -255,7 +255,9 @@ the Dirichlet-Selberg domain is the **dihedron** bounded by the two bisectors $B
   - `wbs`: A list of bisectors with facet pairings bounding the Dirichlet-Selberg domain.
   - `faces`: A list of faces describing the polyhedral structure of the Dirichlet-Selberg domain.
   - `new_wb`: A `numpy.array` matrix $A$ representing the normal matrix of the new half space $\lbrace X\mid \mathrm{tr}(AX)\geq 0\rbrace$.
-- Returns: None (`wbs` and `faces` are updated)
+- Returns:
+  - `wbs`: A list of bisectors with facet pairings bounding the new Dirichlet-Selberg domain.
+  - `faces`: A list of faces describing the polyhedral structure of the new Dirichlet-Selberg domain.
 
 #### `are_faces_paired`
 
