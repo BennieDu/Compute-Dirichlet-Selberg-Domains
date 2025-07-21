@@ -282,7 +282,7 @@ the Dirichlet-Selberg domain is the **dihedron** bounded by the two bisectors $B
       wbs:      list[Word_Bis],
       faces:    list[Poly_Face],
       new_wb:   Word_Bis
-  ) -> tuple[list[Word_Bis], list[Poly_Face]]
+  ) -> None
 </pre>
 
 - What it does:
