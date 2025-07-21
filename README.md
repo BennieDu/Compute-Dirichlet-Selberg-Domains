@@ -134,103 +134,125 @@ the Dirichlet-Selberg domain is the **dihedron** bounded by the two bisectors $B
 <pre markdown>
   @dataclass
   class Word_Bis:
-      word: np.ndarray
-      bis: np.ndarray
+      word: np.ndarray   # g ∈ SL(3,ℝ)
+      bis:  np.ndarray   # normal matrix A for Bis(X, g⁻¹·X)
 </pre>
 
-- Description: A bisector $Bis(X,g^{-1}.X)\subset \mathcal{X}_3$ along with the isometry $g\in SL(3,\mathbb{R})$. A list `my_wbs` of `Word_Bis` elements describes the hyperplanes defining a convex polytope in $\mathcal{X}_3$.
-- Attributes:
-  - `word`: The 3*3 numpy matrix of the isometry $g\in SL(3,\mathbb{R})$.
-  - `bis`: The 3*3 numpy matrix of the normal matrix for the bisector: $Bis(X,g^{-1}.X) = A^\perp = \lbrace Y\mid \mathrm{tr}(AY) = 0\rbrace$.
-
+- What it does:
+  Capture an isometry $g$ and its bisector.
 #### `Poly_Face`
 
 <pre markdown>
   @dataclass
   class Poly_Face:
-      equs: list[int]
-      codim: int
-      subfaces: list[int]
-      sample_point: np.ndarray
+      equs:         list[int]   # indices into `wbs` whose `bis` vanish on this face
+      codim:        int         # codimension of the face (0 = interior, 1 = facet, 2 = ridge)
+      subfaces:     list[int]   # indices into `faces` of strictly smaller faces contained in this face
+      sample_point: np.ndarray  # a point in the interior of this face
 </pre>
 
-- Description: A face of a convex polytope in $\mathcal{X}_3$. A list `my_face_list` along with the list `my_wbs` describes the polytope structure of a convex polytope in $\mathcal{X}_3$.
-- Attributes:
-  - `equs`: A list of indices of equations defining the minimal plane in $\mathcal{X}_3$ that contains the face. Equivalently, the indices `i` such that `my_wbs[i].bis` is normal to the face.
-  - `codim`: The codimension of the face.
-  - `subfaces`: The indices of proper subfaces of the current face. Equivalently, the indices `i` such that `my_face_list[i]` represents a proper subface.
-  - `sample_point`: A 3*3 numpy matrix representing a point lying in the face interior.
+- What it does:
+  Records one face of the polytope (facet, ridge, etc.)
 
 #### `Ridge_Cycle`
 
 <pre markdown>
   @dataclass
   class Ridge_Cycles:
-      ridge: list[int]
-      pairing: list[int]
+      ridge:   list[int]    # ordered indices into `wbs` of ridges in the cycle
+      pairing: list[int]    # for each ridge i, the index into `wbs` pairing it to the next one
 </pre>
 
-- Description: A ridge cycle $[r] = \lbrace r_0,r_1,\dots,r_{m-1}\rbrace$ of the convex polytope (described by lists such as `my_face_list` and `my_wbs`).
-- Attributes:
-  - `ridge`: the indices of the ridges (as in `my_face_list`) in $[r]$, following the order. That is, the $i$-th index is for the ridge $r_i$.
-  - `pairing`: the indices of the words taking a ridge to the next one. That is to say, `my_wbs[i].word` takes $r_i$ to $r_{i+1}$ (indices realized in modulo $m$).
+- What it does:
+  Encodes one cycle of ridges and their facet‑pairings
 
 ### Core Solvers
 
 #### `compute_selberg_domain`
 
-- Description: Compute the polytope structure of the (pre-)Dirichlet-Selberg domain $DS(X,\Gamma_0)$ from generators and center.
-- Parameters:
-  - `gens`: Isometries $g_1,\dots, g_k\in SL(3,\mathbb{R})$ (as `numpy.array` matrices) that generates the subgroup $\Gamma$.
-  - `center`: The center $X\in\mathcal{X}_3$ (as a numpy matrix) of the Dirichlet-Selberg domain.
-  - `length_1`: Maximal length of words in generators $g_1,\dots, g_k$ that will be added to the subset $\Gamma_0\subset \Gamma$.
-  - `length_2`: Maximal length of words, typically greater than `length_1` that may be added to $\Gamma_0$ to eliminate unpaired ridges.
-  - `max_loops`: Number of loops to pick a word up to length `length_2` and add it to $\Gamma_0$.
+<pre markdown>
+  compute_selberg_domain(
+      generators: list[np.ndarray],
+      center:     np.ndarray,
+      length_1:   int,
+      length_2:   Optional[int] = None,
+      loop_times: int           = 0
+  ) -> tuple[list[Word_Bis], list[Poly_Face]]
+</pre>
+
+- What it does:
+  Builds the (pre‑)Dirichlet–Selberg domain $DS(X,\Gamma_0)$ by
+  - Enumerating words up to `length_1`,
+  - Adding words up to `length_2` to pair unpaired ridges (`loop_time` rounds).
 - Returns:
-  - `wbs`: A list of data class `Word_Bis` elements, each describing a bisector that bounds the polytope $DS(X,\Gamma_0)$.
-  - `faces`: A list of data class `Poly_Face` elements, each describing a face of the polytope $DS(X,\Gamma_0)$. The two lists together provide a thorough description of the polyhedral structure of the Dirichlet-Selberg domain.
+  - `wbs` - A list of `Word_Bis` bisectors
+  - `faces` - A list of `Poly_Face` describing the resulting polytope
 
 #### `polytope_exactness`
 
-- Description: Decide if a given (pre-)Dirichlet-Selberg domain is exact with respect to the canonical facet pairings.
-- Parameters:
-  - `wbs`: A list of bisectors with facet pairings bounding the Dirichlet-Selberg domain.
-  - `faces`: A list of faces describing the polyhedral structure of the Dirichlet-Selberg domain.
+<pre markdown>
+  polytope_exactness(
+      wbs:   list[Word_Bis],
+      faces: list[Poly_Face]
+  ) -> Optional[dict[int, int]]
+</pre>
+
+- What it does:
+  Checks that every facet in `faces` is paired canonically by a word in `wbs`.
 - Returns:
-  - `pairing_dict`: A dictionary whose keys are indices (in `my_face_list`) of the facets, and the values are the incides of the corresponding paired facets. It is `None` if the given domain is not exact.
+  - `pairing_dict` - A dict `{"facets": [...], "paired_facets": [...]}` if exact, or `None` if any facet is unpaired
 
 #### `compute_ridge_cycles`
 
-- Description: Compute all ridge cycles of a given exact (pre-)Dirichlet-Selberg domain.
-- Parameters:
-  - `wbs`: A list of bisectors with facet pairings bounding the Dirichlet-Selberg domain.
-  - `faces`: A list of faces describing the polyhedral structure of the Dirichlet-Selberg domain.
+<pre markdown>
+  compute_ridge_cycles(
+      wbs:   list[Word_Bis],
+      faces: list[Poly_Face]
+  ) -> Optional[list[Ridge_Cycle]]
+</pre>
+
+- What it does:
+  For an exact domain, traces each cycle of ridges via facet pairings.
 - Returns:
-  - `ridge_cycles`: A list of `Ridge_Cycle` data class elements, each is a ridge cycle of the given domain.
+  - `ridge_cycles` - A list of `Ridge_Cycle` objects, or `None` if the domain is not exact.
 
 #### `compute_angle_sum`
 
-- Description: Compute the quotient of $2\pi$ by the angle sum of a given ridge cycle in a given exact (pre-)Dirichlet-Selberg domain. The angle-sum condition is satisfied if this quotient is an integer.
-- Parameters:
-  - `wbs`: A list of bisectors with facet pairings bounding the Dirichlet-Selberg domain.
-  - `faces`: A list of faces describing the polyhedral structure of the Dirichlet-Selberg domain.
-  - `ridge_cycle`: A `Ridge_Cycle` element describing a ridge cycle of the given domain.
+<pre markdown>
+  compute_angle_sum(
+      wbs:         list[Word_Bis],
+      faces:       list[Poly_Face],
+      ridge_cycle: Ridge_Cycle
+  ) -> Optional[int]
+</pre>
+
+- What it does: Computes the integer $k$ such that the sum of dihedral angles around `ridge_cycle` is $2\pi/k$.
+
 - Returns:
-  - `angle_sum_quotient`: A natural number $k$ such that the angle sum of the given ridge cycle equals $2\pi/k$. Return `None` if no such natural number is satisfied.
+  - `angle_sum_quotient`: The natural number $k$ if the condition holds, or `None` otherwise.
 
 #### `is_word_recovered`
 
-- Description: Decide if an isometry in $SL(3,\mathbb{R})$ is generated by the facet pairings of a given Dirichlet-Selberg domain.
-- Parameters:
-  - `wbs`: A list of bisectors with facet pairings bounding the Dirichlet-Selberg domain.
-  - `faces`: A list of faces describing the polyhedral structure of the Dirichlet-Selberg domain.
-  - `isom`: An isometry in $SL(3,\mathbb{R})$ as a `numpy.array` matrix.
+<pre markdown>
+  is_word_recovered(
+      wbs:   list[Word_Bis],
+      faces: list[Poly_Face],
+      isom:  np.ndarray
+  ) -> bool
+</pre>
+
+- What it does:
+  Tests whether the isometry `isom` is realized by composing facet pairings of the domain.
 - Returns:
-  - `is_recovered`: Boolean variable determining if the given isometry is generated by the facet pairings of the given domain.
+  - `is_recovered`: `True` if recovered, `False` otherwise.
 
 ### Utility Functions
 
 #### `compute_word_bisectors`
+
+<pre markdown>
+  
+</pre>
 
 - Description: Compute all pairs of bisector $\mathrm{Bis}(X,g^{-1}.X)$ and isometry $g$ (as a `Word.Bis` data class element) generated by given generators and up to a given word length.
 - Parameters
@@ -242,6 +264,10 @@ the Dirichlet-Selberg domain is the **dihedron** bounded by the two bisectors $B
 
 #### `find_feasible_point`
 
+<pre markdown>
+
+</pre>
+
 - Description: Decide if the intersection $\cap A_i^\perp$ of given hyperplanes is non-empty; if so, obtain a sample point in this intersection plane.
 - Parameters:
   - `plane_eqs`: A list of indefinite `numpy.array` matrices $A_i$, each represents a hyperplane $A_i^\perp\subset \mathcal{X}_3$.
@@ -249,6 +275,10 @@ the Dirichlet-Selberg domain is the **dihedron** bounded by the two bisectors $B
   - `feasible_point`: A `numpy.array` matrix representing a sample point in the intersection $\cap A_i^\perp$, or `None` if the intersection is empty.
 
 #### `add_facet_to_domain`
+
+<pre markdown>
+
+</pre>
 
 - Description: Intersect the given (pre-)Dirichlet-Selberg domain with a new half space and obtain the polyhedral structure of the resulting domain.
 - Parameters:
@@ -261,6 +291,10 @@ the Dirichlet-Selberg domain is the **dihedron** bounded by the two bisectors $B
 
 #### `are_faces_paired`
 
+<pre markdown>
+
+</pre>
+
 - Description: Decide if two certain faces in a given (pre-)Dirichlet-Selberg domain are isometrically paired by the given isometry in $SL(3,\mathbb{R})$.
 - Parameters:
   - `wbs`: A list of bisectors with facet pairings bounding the Dirichlet-Selberg domain.
@@ -272,6 +306,10 @@ the Dirichlet-Selberg domain is the **dihedron** bounded by the two bisectors $B
   - `are_paired`: Boolean variable showing if thw two faces are paired by the isometry.
 
 #### `find_path_word`
+
+<pre markdown>
+
+</pre>
 
 - Description: Find the word in letters of the facet pairings that takes a given point in $\mathcal{X}_3$ into the given Dirichlet-Selberg domain.
 - Parameters:
