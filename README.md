@@ -353,7 +353,7 @@ Below we illustrate three exemplary workflows. Each example has two phases:
           print(f"Generator #{i} is NOT recovered")
 </pre>
 
-- **Verify the validity of sample point (Optional)**. To ensure that all `face.sample_point` for `face` in `faces` are taken correctly, computes the following values:
+- **Verify the validity of sample point (Optional)**. To ensure that all `face.sample_point` for `face` in `faces` are taken correctly, compute the following values:
   - `max_on_plane`: the maximum $\lvert\mathrm{tr}(A_iX)\rvert$ over each face's defining bisector(s) $A_i$ and its `sample_point` $X$. Should be $\approx 0$.
   - `min_off_plane`: the minimum $\mathrm{tr}(A_jX)$ over all other bisectors $A_j$. Should be $>0$.
 
