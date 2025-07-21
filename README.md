@@ -14,6 +14,7 @@
   - [Lattice](#lattice)
   - [$SL(2,\mathbb{R})$ Subgroup](#sl2mathbbr-subgroup)
 - [License](#license)
+- [Cite this Work](#cite-this-work)
 - [Contact & Acknowledgments](#contact--acknowledgments)
 
 ## Background
@@ -521,6 +522,16 @@ $$ SL(2,\mathbb{R})\hookrightarrow SL(3,\mathbb{R}),\ g\mapsto \mathrm{diag}(g,1
 ## License
 
 This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
+
+## Cite this Work
+
+This version is archived on Zenodo:
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.16257104.svg)](https://doi.org/10.5281/zenodo.16257104)
+
+If you use this project, please cite:
+
+Yukun, D. (2025). BennieDu/Compute-Dirichlet-Selberg-Domains: Compute Dirichlet-Selberg domains v1.0.0 (v1.0.0). Zenodo. https://doi.org/10.5281/zenodo.16257104
 
 ## Contact & Acknowledgments
 
