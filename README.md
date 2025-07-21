@@ -353,6 +353,35 @@ Below we illustrate three exemplary workflows. Each example has two phases:
           print(f"Generator #{i} is NOT recovered")
 </pre>
 
+- **Verify the validity of sample point (Optional)**. To ensure that all `face.sample_point` for `face` in `faces` are taken correctly, computes the following values:
+  - `max_on_plane`: the maximum $\lvert\mathrm{tr}(A_iX)\rvert$ over each face's defining bisector(s) $A_i$ and its `sample_point` $X$. Should be $\approx 0$.
+  - `min_off_plane`: the minimum $\mathrm{tr}(A_jX)$ over all other bisectors $A_j$. Should be $>0$.
+
+<pre markdown>
+  # 1) Maximum absolute trace over each face's own bisectors
+  max_on_plane = max(
+      abs(np.trace(wbs[i].bis @ face.sample_point))
+      for face in faces
+      for i    in face.equs
+  )
+  print(
+      "Max |tr(A·X)| on each face’s plane:", 
+      max_on_plane
+  )
+  
+  # 2) Minimum trace over all bisectors *not* defining that face
+  all_indices = set(range(len(wbs)))
+  min_off_plane = min(
+      np.trace(wbs[j].bis @ face.sample_point)
+      for face in faces
+      for j    in (all_indices - set(face.equs))
+  )
+  print(
+      "Min  tr(A·X) off each face’s plane:", 
+      min_off_plane
+  )
+</pre>
+
 ### Elementary Subgroup
 
 Below computes the Dirichlet-Selberg domain for a two-generated Abelian subgroup of $SL(3,\mathbb{Z})$:
